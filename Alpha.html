@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Question</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 16px; /* Set base font size */
+            font-family: Arial, sans-serif; /* Set consistent font family */
+            overflow: hidden; /* Prevents scrollbar caused by floating hearts */
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: rgb(185, 33, 58);
+            font-size: inherit;
+        }
+        /* Container for the GIF */
+        .gif-container {
+            margin-bottom: 20px;
+        }
+        img {
+            width: 150px; /* Size of the GIF */
+            height: 150px;
+            object-fit: cover;
+        }
+        .buttons {
+            display: flex;
+            align-items: center;
+        }
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            position: relative; /* Position relative to contain hearts */
+        }
+        #yes-btn {
+            background-color: #D8BFD8; /* Light violet background */
+            color: white;
+        }
+        #no-btn {
+            margin-left: 50px; /* 50px space between Yes and No buttons */
+            background-color: red; /* Red background for the No button */
+            color: white;
+            position: absolute;
+        }
+
+        /* Heart CSS */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: red;
+            animation: rise 1s ease-in-out forwards;
+        }
+
+        /* Heart animation */
+        @keyframes rise {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        /* Floating hearts across the page */
+        .floating-heart {
+            position: absolute;
+            font-size: 24px;
+            color: red;
+            animation: float 5s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- GIF container above the text -->
+    <div class="gif-container">
+        <img src="cat-cats.gif" alt="GIF">
+    </div>
+
+    <h1>Would you like to go out with me for a date?</h1>
+
+    <div class="buttons">
+        <button class="btn" id="yes-btn" onclick="createHearts()">Yes</button>
+        <button class="btn" id="no-btn" onclick="moveNoButton()">No</button>
+    </div>
+
+    <script>
+        // Create hearts animation on Yes button click and redirect after animation
+        function createHearts() {
+            const yesBtn = document.getElementById('yes-btn');
+            
+            for (let i = 0; i < 5; i++) {
+                // Create heart element
+                const heart = document.createElement('span');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                
+                // Randomize heart positions around the button
+                const randomX = Math.random() * 100 - 50;
+                const randomY = Math.random() * 20 - 10;
+                heart.style.left = `${randomX}px`;
+                heart.style.top = `${randomY}px`;
+
+                // Add the heart to the Yes button
+                yesBtn.appendChild(heart);
+                
+                // Remove the heart after the animation completes
+                setTimeout(() => {
+                    heart.remove();
+                }, 1000);
+            }
+
+            // Redirect to another page after 1 second (after the animation)
+            setTimeout(() => {
+                window.location.href = 'Bravo.html'; // Replace with your desired page URL
+            }, 1000);
+        }
+
+        // Move the No button to a random position
+        function moveNoButton() {
+            const noBtn = document.getElementById('no-btn');
+            const bodyHeight = document.body.clientHeight;
+            const bodyWidth = document.body.clientWidth;
+
+            // Generate random positions within the window
+            const randomTop = Math.floor(Math.random() * (bodyHeight - noBtn.offsetHeight));
+            const randomLeft = Math.floor(Math.random() * (bodyWidth - noBtn.offsetWidth));
+
+            // Move the "No" button to a random position
+            noBtn.style.top = randomTop + 'px';
+            noBtn.style.left = randomLeft + 'px';
+        }
+
+        // Generate infinite floating hearts
+        function generateFloatingHearts() {
+            const body = document.body;
+            setInterval(() => {
+                const heart = document.createElement('span');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+
+                // Randomize starting position of floating hearts
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.animationDuration = Math.random() * 3 + 3 + 's'; // Randomize speed of floating
+                body.appendChild(heart);
+
+                // Remove heart after it floats out of view
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000); // Duration matches the animation duration
+            }, 500); // Creates a heart every 500 milliseconds
+        }
+
+        // Start floating hearts when the page loads
+        window.onload = generateFloatingHearts;
+    </script>
+
+</body>
+</html>
+
+

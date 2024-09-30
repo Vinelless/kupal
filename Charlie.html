@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>When Are You Free?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+            font-size: 16px; /* Set base font size */
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: rgb(185, 33, 58);
+            font-size: inherit;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .inputs-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        select, input[type="date"], input[type="time"], .clickable-btn {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 150px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input[type="date"]:focus, input[type="time"]:focus {
+            border-color: #4CAF50;
+        }
+
+        .clickable-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 220px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .clickable-btn:hover {
+            background-color: #45a049;
+        }
+
+        .clickable-btn:active {
+            transform: scale(1.1);
+            background-color: #3e8e41;
+        }
+
+        /* Tooltip for displaying date */
+        .tooltip {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.5s linear;
+        }
+
+        .gif-container {
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Heart CSS */
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            color: red;
+            animation: rise 2s ease-in-out forwards;
+        }
+
+        /* Heart animation */
+        @keyframes rise {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gif-container">
+        <!-- Replace the source with your desired GIF link -->
+        <img src="pianistchenle-heart-cat-love.gif" alt="Funny GIF">
+    </div>
+
+    <h1>When are you free?</h1>
+
+    <div class="form-container">
+        <div class="inputs-container">
+            <div class="date-container">
+                <input type="date" id="date" required onmouseover="showDateTooltip(event)" onmouseout="hideDateTooltip()">
+                <div id="date-tooltip" class="tooltip"></div>
+            </div>
+            <input type="time" id="time" required>
+        </div>
+        <button class="clickable-btn" onclick="window.location.href='Delta.html'">Click Me</button>
+    </div>
+
+    <script>
+        function showDateTooltip(event) {
+            const tooltip = document.getElementById('date-tooltip');
+            const date = new Date(event.target.value);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            tooltip.innerHTML = date.toLocaleDateString(undefined, options);
+            tooltip.style.left = `${event.target.getBoundingClientRect().left}px`;
+            tooltip.style.top = `${event.target.getBoundingClientRect().bottom + 5}px`;
+            tooltip.style.visibility = 'visible';
+            tooltip.style.opacity = '1';
+        }
+
+        function hideDateTooltip() {
+            const tooltip = document.getElementById('date-tooltip');
+            tooltip.style.visibility = 'hidden';
+            tooltip.style.opacity = '0';
+        }
+
+        // Function to create a heart at a random position
+        function createHeart() {
+            const heart = document.createElement('span');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+
+            // Randomize heart positions across the viewport
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+            heart.style.left = `${randomX}px`;
+            heart.style.top = `${randomY}px`;
+
+            // Add the heart to the body
+            document.body.appendChild(heart);
+
+            // Remove the heart after the animation completes
+            setTimeout(() => {
+                heart.remove();
+            }, 2000); // Adjust the timeout to match animation duration
+        }
+
+        // Create an infinite stream of hearts
+        setInterval(createHeart, 500); // Adjust the interval to control heart frequency
+    </script>
+</body>
+</html>

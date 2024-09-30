@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizontal Food Menu</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two items per row */
+            gap: 20px; /* Space between items */
+            width: 700px; /* Set a fixed width for the menu area */
+        }
+
+        .menu-item {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover {
+            transform: scale(1.05);
+        }
+
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .menu-info {
+            padding: 15px;
+        }
+
+        .menu-info h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .menu-info p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .menu-info button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .menu-info button:hover {
+            background-color: #45a049;
+        }
+
+        .done-button {
+            color: #f4f4f4;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .done-button:hover {
+            background-color: #1976D2;
+        }
+
+        .order-summary {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: rgba(24, 4, 16, 0.637); /* Slightly transparent */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            border-radius: 10px; /* Rounded corners for a cleaner look */
+        }
+
+        .order-summary h3 {
+            margin-bottom: 15px;
+            color: #f4f4f4;
+        }
+
+        .order-summary ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .order-summary ul li {
+            font-size: 18px;
+            color: aliceblue;
+            margin: 5px 0;
+        }
+
+        .gif-container {
+            margin-bottom: 15px; /* Space below the GIF */
+        }
+
+        .gif-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .close-btn {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-container">
+        <!-- Menu Item 1 -->
+        <div class="menu-item">
+            <img src="image copy 2.png" alt="Sinigang na Hipon">
+            <div class="menu-info">
+                <h3>Sinigang na Hipon</h3>
+                <p>Sinigang na Hipon is a Filipino sour and savory shrimp soup.</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Menu Item 2 -->
+        <div class="menu-item">
+            <img src="image copy 3.png" alt="Mango Juice">
+            <div class="menu-info">
+                <h3>Mango Juice</h3>
+                <p>Cold-pressed golden mango juice is the ultimate refreshing drink for a hot summer day.</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Menu Item 3 -->
+        <div class="menu-item">
+            <img src="image copy.png" alt="Lechon Kawali">
+            <div class="menu-info">
+                <h3>Lechon Kawali</h3>
+                <p>This juicy, crispy pork belly is made in the style of Filipino lechon kawali.</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+
+        <!-- Menu Item 4 -->
+        <div class="menu-item">
+            <img src="image copy 4.png" alt="Steam Crab">
+            <div class="menu-info">
+                <h3>Steam Crab</h3>
+                <p>Snow Crab with garlic lemon butter.</p>
+                <button class="add-to-cart">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="done-button">Done</button>
+
+    <div class="order-summary" id="orderSummary">
+        <div class="gif-container">
+            <!-- Replace with your desired GIF link -->
+            <img src="eat-natsume-yujincho.gif" alt="Order GIF">
+        </div>
+        <h3>Your Order</h3>
+        <ul id="orderList"></ul>
+        <button class="close-btn" onclick="closeOrderSummary()">Close</button>
+    </div>
+
+    <script>
+        const cart = [];
+
+        // Add event listeners to each "Add to Cart" button
+        document.querySelectorAll('.add-to-cart').forEach((button) => {
+            button.addEventListener('click', function() {
+                const itemName = this.parentElement.querySelector('h3').textContent;
+                cart.push(itemName);
+            });
+        });
+
+        // Show the order summary when "Done" button is clicked
+        document.querySelector('.done-button').addEventListener('click', function() {
+            if (cart.length > 0) {
+                const orderSummary = document.getElementById('orderSummary');
+                const orderList = document.getElementById('orderList');
+                orderList.innerHTML = '';
+                cart.forEach(function(item) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = item;
+                    orderList.appendChild(listItem);
+                });
+                orderSummary.style.display = 'block';
+            } else {
+                alert('No items in cart.');
+            }
+        });
+
+        // Close the order summary
+        function closeOrderSummary() {
+            document.getElementById('orderSummary').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
